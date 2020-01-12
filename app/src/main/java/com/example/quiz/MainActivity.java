@@ -3,9 +3,12 @@ package com.example.quiz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,23 +22,24 @@ public class MainActivity extends AppCompatActivity {
     ImageView startImageView;
     ImageView gameImageView;
     ImageView clubLogosImg;
+    ImageView gameOverImageView;
     Button startButton;
     Button losujklub;
 
     int currentImage;
-    int [] clubLogosTable = {R.drawable.ajax, R.drawable.atalanta,R.drawable.atletico,R.drawable.barcelona,R.drawable.bayer,
-            R.drawable.bayern,R.drawable.benfica,R.drawable.borussia,R.drawable.chelsea,R.drawable.clubbrugge,R.drawable.crvenazvezda,
-            R.drawable.dinamozagreb,R.drawable.galatasaray,R.drawable.genk,R.drawable.inter,R.drawable.juventus,R.drawable.liverpool,
-            R.drawable.lokomotiv,R.drawable.machestercity,R.drawable.napoli,R.drawable.ol,R.drawable.olympiacos,R.drawable.osclille,
-            R.drawable.psg,R.drawable.rblipsk,R.drawable.rbsalzburg,R.drawable.realmadryt,R.drawable.shakhtar,R.drawable.slavia,
-            R.drawable.tottenham,R.drawable.valencia, R.drawable.zenit};
+    int[] clubLogosTable = {R.drawable.ajax, R.drawable.atalanta, R.drawable.atletico, R.drawable.barcelona, R.drawable.bayer,
+            R.drawable.bayern, R.drawable.benfica, R.drawable.borussia, R.drawable.chelsea, R.drawable.clubbrugge, R.drawable.crvenazvezda,
+            R.drawable.dinamozagreb, R.drawable.galatasaray, R.drawable.genk, R.drawable.inter, R.drawable.juventus, R.drawable.liverpool,
+            R.drawable.lokomotiv, R.drawable.machestercity, R.drawable.napoli, R.drawable.ol, R.drawable.olympiacos, R.drawable.osclille,
+            R.drawable.psg, R.drawable.rblipsk, R.drawable.rbsalzburg, R.drawable.realmadryt, R.drawable.shakhtar, R.drawable.slavia,
+            R.drawable.tottenham, R.drawable.valencia, R.drawable.zenit};
 
     String currentName;
-    String [] clubNamesTable = {"Ajax Amsterdam" ,"Atalanta Bergamo","Atletico Madryt", "FC Barcelona","Bayer Leverkusen",
-            "Bayern Monachium","Benfica Lizbona","Borussia Dortmund","Chelsea Londyn","Club Brugge","Crvena Zvezda",
+    String[] clubNamesTable = {"Ajax Amsterdam", "Atalanta Bergamo", "Atletico Madryt", "FC Barcelona", "Bayer Leverkusen",
+            "Bayern Monachium", "Benfica Lizbona", "Borussia Dortmund", "Chelsea Londyn", "Club Brugge", "Crvena Zvezda",
             "Dinamo Zagreb", "Galatasaray", "Genk", "Inter Mediolan", "Juventus Turyn", "Liverpool FC",
-            "Lokomotiv Moskwa","Manchester City","Napoli","Olympic Lyon", "Olympiacos Pireus","OSC Lille",
-            "PSG","RB Lipsk",  "RB Salzburg","Real Madryt","Shakhtar Donieck","Slavia Praga","Tottenham Spurs","Valencia","Zenit"};
+            "Lokomotiv Moskwa", "Manchester City", "Napoli", "Olympic Lyon", "Olympiacos Pireus", "OSC Lille",
+            "PSG", "RB Lipsk", "RB Salzburg", "Real Madryt", "Shakhtar Donieck", "Slavia Praga", "Tottenham Spurs", "Valencia", "Zenit"};
 
     androidx.gridlayout.widget.GridLayout answersLayout;
 
@@ -48,8 +52,14 @@ public class MainActivity extends AppCompatActivity {
     Button button2;
     Button button3;
 
-    TextView resultTextView;
+
     TextView scoreTextView;
+
+    Chronometer timer;
+    private boolean isResume;
+    Handler handler;
+    long tMilliSec, tStart, tBuff, tUpdate = 0L;
+    int sec, min, milliSec;
 
 
     @Override
@@ -59,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         startImageView = findViewById(R.id.startImageView);
         gameImageView = findViewById(R.id.gameImageView);
         startButton = findViewById(R.id.startButton);
+        gameOverImageView = findViewById(R.id.gameOverImageView);
         clubLogosImg = findViewById(R.id.clubLogosImg);
-        losujklub = findViewById(R.id.losujklub);
         answersLayout = findViewById(R.id.answersLayout);
 
         button0 = findViewById(R.id.button0);
@@ -69,37 +79,64 @@ public class MainActivity extends AppCompatActivity {
         button3 = findViewById(R.id.button3);
 
         scoreTextView = findViewById(R.id.scoreTextView);
-       // resultTextView = findViewById(R.id.resultTextView);
-
-
-
 
         startImageView.setVisibility(View.VISIBLE);
         gameImageView.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
-        losujklub.setVisibility(View.INVISIBLE);
+        gameOverImageView.setVisibility(View.INVISIBLE);
         scoreTextView.setVisibility(View.INVISIBLE);
-        //pickClub();
 
 
         answersLayout.setVisibility(View.INVISIBLE);
 
-
+        timer = findViewById(R.id.timer);
+        handler = new Handler();
+        timer.setVisibility(View.INVISIBLE);
 
     }
 
 
-    public void startGame (View view) {
+    public Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            tMilliSec = SystemClock.uptimeMillis() - tStart;
+            tUpdate = tBuff + tMilliSec;
+            sec = (int) (tUpdate / 1000);
+            min = sec / 60;
+            sec = sec % 60;
+            milliSec = (int) (tUpdate % 100);
+            timer.setText(String.format("%02d", min) + ":" + String.format("%02d", sec) + ":" +
+                    String.format("%02d", milliSec));
+            handler.postDelayed(this, 60);
+
+        }
+    };
+
+
+    public void startTimer() {
+
+        tStart = SystemClock.uptimeMillis();
+        handler.postDelayed(runnable, 0);
+        timer.start();
+    }
+
+    //public void stopTimer(){
+
+
+    //}
+
+    public void startGame(View view) {
 
         startImageView.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.INVISIBLE);
         gameImageView.setVisibility(View.VISIBLE);
-     //   losujklub.setVisibility(View.VISIBLE);
         answersLayout.setVisibility(View.VISIBLE);
         scoreTextView.setVisibility(View.VISIBLE);
         scoreTextView.setText("0/0");
+        timer.setVisibility(View.VISIBLE);
+        startTimer();
         newQuestion();
-
+        //gameOver();
 
 
     }
@@ -118,13 +155,11 @@ public class MainActivity extends AppCompatActivity {
         Log.i("Aktualna liczba: ", String.valueOf(currentImage));
 
 
-
-
         locationOfCorrectAnswer = random.nextInt(4);
         answers.clear();
 
 
-        for (int i = 0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             if (i == locationOfCorrectAnswer) {
                 answers.add(currentName);
             } else {
@@ -147,23 +182,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void chooseAnswer(View view) {
         if (Integer.toString(locationOfCorrectAnswer).equals(view.getTag().toString())) {
-            //resultTextView.setText("Dobry wybór");
             score++;
         } else {
-            //resultTextView.setText("Zły wybór");
         }
         numberOfQuestions++;
         scoreTextView.setText(Integer.toString(score) + "/" + Integer.toString(numberOfQuestions));
         newQuestion();
+
+            if (numberOfQuestions == 5) {
+                tBuff += tMilliSec;
+                handler.removeCallbacks(runnable);
+                timer.stop();
+                String czas = timer.getText().toString();
+                gameOverImageView.setVisibility(View.VISIBLE);
+
+                Log.i("Czas", czas);
+
+            }
+
+
+        }
+
+
     }
 
-
-
-
-
-
-
-}
 
 
 
