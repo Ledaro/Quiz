@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     String [] clubNamesTable = {"Ajax Amsterdam" ,"Atalanta Bergamo","Atletico Madryt", "FC Barcelona","Bayer Leverkusen",
             "Bayern Monachium","Benfica Lizbona","Borussia Dortmund","Chelsea Londyn","Club Brugge","Crvena Zvezda",
             "Dinamo Zagreb", "Galatasaray", "Genk", "Inter Mediolan", "Juventus Turyn", "Liverpool FC",
-            "Lokomotic Moskwa","Manchester City","Napoli","Olympic Lyon", "Olympiacos Pireus","OSC Lille",
-            "PSG","RB Lipsk",  "RB Salzburg","Real Madryt","Shakhtar Donieck","Slaviaa Praga","Tottenham Spurs","Valencia","Zenit"};
+            "Lokomotiv Moskwa","Manchester City","Napoli","Olympic Lyon", "Olympiacos Pireus","OSC Lille",
+            "PSG","RB Lipsk",  "RB Salzburg","Real Madryt","Shakhtar Donieck","Slavia Praga","Tottenham Spurs","Valencia","Zenit"};
 
     androidx.gridlayout.widget.GridLayout answersLayout;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         button3 = findViewById(R.id.button3);
 
         scoreTextView = findViewById(R.id.scoreTextView);
-        resultTextView = findViewById(R.id.resultTextView);
+       // resultTextView = findViewById(R.id.resultTextView);
 
 
 
@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         gameImageView.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
         losujklub.setVisibility(View.INVISIBLE);
-        pickClub();
+        scoreTextView.setVisibility(View.INVISIBLE);
+        //pickClub();
 
 
         answersLayout.setVisibility(View.INVISIBLE);
@@ -93,71 +94,50 @@ public class MainActivity extends AppCompatActivity {
         startImageView.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.INVISIBLE);
         gameImageView.setVisibility(View.VISIBLE);
-        losujklub.setVisibility(View.VISIBLE);
+     //   losujklub.setVisibility(View.VISIBLE);
         answersLayout.setVisibility(View.VISIBLE);
+        scoreTextView.setVisibility(View.VISIBLE);
+        scoreTextView.setText("0/0");
         newQuestion();
 
 
 
     }
 
-    private void pickClub() {
-
-
-        losujklub.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //currentImage++;
-                        //currentImage = currentImage % clubLogosTable.length;
-
-                        Random random = new Random();
-                        int randomClub = random.nextInt(31);
-                        currentImage = randomClub;
-
-                        Log.i("Aktualna liczba: ", String.valueOf(currentImage));
-
-                        clubLogosImg.setImageResource(clubLogosTable[currentImage]);
-                        currentName = clubNamesTable[currentImage];
-                        Log.i("Aktualny klub: ", currentName);
-
-
-
-                    }
-                }
-
-        );
-    }
 
     public void newQuestion() {
+
         Random random = new Random();
-        int a = random.nextInt(31);
-        String currentClubName = "";
-        //int b = random.nextInt(21);
-        //sumTextView.setText(Integer.toString(a) + " + " + Integer.toString(b));
-        currentClubName = clubNamesTable[currentImage];
+        int randomClub = random.nextInt(31);
+
+
+        currentImage = randomClub;
+        clubLogosImg.setImageResource(clubLogosTable[currentImage]);
+        currentName = clubNamesTable[currentImage];
+        Log.i("Aktualny klub: ", currentName);
+        Log.i("Aktualna liczba: ", String.valueOf(currentImage));
+
+
 
 
         locationOfCorrectAnswer = random.nextInt(4);
         answers.clear();
 
-        String wrongAnswerClubName2 = "";
+
         for (int i = 0; i<4; i++) {
             if (i == locationOfCorrectAnswer) {
-                answers.add(currentClubName);
+                answers.add(currentName);
             } else {
                 int wrongAnswer = random.nextInt(31);
                 String wrongAnswerClubName = clubNamesTable[wrongAnswer];
-                while (wrongAnswer == currentImage) {
+                while (wrongAnswer == randomClub) {
                     wrongAnswer = random.nextInt(31);
-                    wrongAnswerClubName2 = clubNamesTable[wrongAnswer];
+                    wrongAnswerClubName = clubNamesTable[wrongAnswer];
                 }
-                answers.add(wrongAnswerClubName2);
+                answers.add(wrongAnswerClubName);
             }
 
         }
-        //   Log.i(currentClubName, wrongAnswerClubName);
-
 
         button0.setText((answers.get(0)));
         button1.setText((answers.get(1)));
@@ -167,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void chooseAnswer(View view) {
         if (Integer.toString(locationOfCorrectAnswer).equals(view.getTag().toString())) {
-            resultTextView.setText("Dobry wybór");
+            //resultTextView.setText("Dobry wybór");
             score++;
         } else {
-            resultTextView.setText("Zły wybór");
+            //resultTextView.setText("Zły wybór");
         }
         numberOfQuestions++;
         scoreTextView.setText(Integer.toString(score) + "/" + Integer.toString(numberOfQuestions));
