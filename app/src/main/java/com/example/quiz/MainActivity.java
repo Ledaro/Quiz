@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.quiz.R;
 
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     Button button2;
     Button button3;
 
-
-
+    TextView resultTextView;
+    TextView scoreTextView;
 
 
     @Override
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
+
+        scoreTextView = findViewById(R.id.scoreTextView);
+        resultTextView = findViewById(R.id.resultTextView);
 
 
 
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         clubLogosImg.setImageResource(clubLogosTable[currentImage]);
                         currentName = clubNamesTable[currentImage];
                         Log.i("Aktualny klub: ", currentName);
-                        newQuestion();
+
 
 
                     }
@@ -161,7 +165,17 @@ public class MainActivity extends AppCompatActivity {
         button3.setText((answers.get(3)));
     }
 
-
+    public void chooseAnswer(View view) {
+        if (Integer.toString(locationOfCorrectAnswer).equals(view.getTag().toString())) {
+            resultTextView.setText("Dobry wybór");
+            score++;
+        } else {
+            resultTextView.setText("Zły wybór");
+        }
+        numberOfQuestions++;
+        scoreTextView.setText(Integer.toString(score) + "/" + Integer.toString(numberOfQuestions));
+        newQuestion();
+    }
 
 
 
