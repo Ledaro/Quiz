@@ -12,9 +12,8 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.quiz.R;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView clubLogosImg;
     ImageView gameOverImageView;
     Button startButton;
-    Button losujklub;
+
 
     int currentImage;
     int[] clubLogosTable = {R.drawable.ajax, R.drawable.atalanta, R.drawable.atletico, R.drawable.barcelona, R.drawable.bayer,
@@ -41,12 +40,14 @@ public class MainActivity extends AppCompatActivity {
             "Lokomotiv Moskwa", "Manchester City", "Napoli", "Olympic Lyon", "Olympiacos Pireus", "OSC Lille",
             "PSG", "RB Lipsk", "RB Salzburg", "Real Madryt", "Shakhtar Donieck", "Slavia Praga", "Tottenham Spurs", "Valencia", "Zenit"};
 
+    ArrayList<Integer> usedIndexes;
+
     androidx.gridlayout.widget.GridLayout answersLayout;
 
     int locationOfCorrectAnswer;
     int score = 0;
     int numberOfQuestions = 0;
-    ArrayList<String> answers = new ArrayList<>();
+    String[] answers;
     Button button0;
     Button button1;
     Button button2;
@@ -56,10 +57,11 @@ public class MainActivity extends AppCompatActivity {
     TextView scoreTextView;
 
     Chronometer timer;
-    private boolean isResume;
     Handler handler;
     long tMilliSec, tStart, tBuff, tUpdate = 0L;
     int sec, min, milliSec;
+
+    Random random;
 
 
     @Override
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         handler = new Handler();
         timer.setVisibility(View.INVISIBLE);
 
+        usedIndexes = new ArrayList<>();
+        random = new Random();
+        answers = new String[4];
     }
 
 
@@ -120,10 +125,6 @@ public class MainActivity extends AppCompatActivity {
         timer.start();
     }
 
-    //public void stopTimer(){
-
-
-    //}
 
     public void startGame(View view) {
 
@@ -142,13 +143,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void newQuestion() {
+    int getClubIndex() {
 
-        Random random = new Random();
+
         int randomClub = random.nextInt(31);
 
+        if (usedIndexes.contains(randomClub)) {
+            return getClubIndex();
 
+        }
+        usedIndexes.add(randomClub);
+
+        return randomClub;
+    }
+
+
+    private String getWrongAnswerName() {
+        int wrongAnswer = random.nextInt(31);
+        String wrongAnswerClubName = clubNamesTable[wrongAnswer];
+
+        if (Arrays.asList( answers).contains(wrongAnswerClubName) == true) {
+            return getWrongAnswerName();
+        }
+
+        return wrongAnswerClubName;
+    }
+
+
+    public void newQuestion() {
+        checkEndgameConditions();
+        int randomClub = getClubIndex();
         currentImage = randomClub;
+
         clubLogosImg.setImageResource(clubLogosTable[currentImage]);
         currentName = clubNamesTable[currentImage];
         Log.i("Aktualny klub: ", currentName);
@@ -156,55 +182,58 @@ public class MainActivity extends AppCompatActivity {
 
 
         locationOfCorrectAnswer = random.nextInt(4);
-        answers.clear();
+        answers = new String[4];
+        answers[locationOfCorrectAnswer] = currentName;
 
 
         for (int i = 0; i < 4; i++) {
+
             if (i == locationOfCorrectAnswer) {
-                answers.add(currentName);
-            } else {
-                int wrongAnswer = random.nextInt(31);
-                String wrongAnswerClubName = clubNamesTable[wrongAnswer];
-                while (wrongAnswer == randomClub) {
-                    wrongAnswer = random.nextInt(31);
-                    wrongAnswerClubName = clubNamesTable[wrongAnswer];
-                }
-                answers.add(wrongAnswerClubName);
+                continue;
             }
+
+            String wrongAnswerClubName = getWrongAnswerName();
+            answers[i] = wrongAnswerClubName;
 
         }
 
-        button0.setText((answers.get(0)));
-        button1.setText((answers.get(1)));
-        button2.setText((answers.get(2)));
-        button3.setText((answers.get(3)));
+        button0.setText((answers[0]));
+        button1.setText((answers[1]));
+        button2.setText((answers[2]));
+        button3.setText((answers[3]));
+
+
     }
 
     public void chooseAnswer(View view) {
         if (Integer.toString(locationOfCorrectAnswer).equals(view.getTag().toString())) {
             score++;
-        } else {
         }
+
         numberOfQuestions++;
         scoreTextView.setText(Integer.toString(score) + "/" + Integer.toString(numberOfQuestions));
         newQuestion();
 
-            if (numberOfQuestions == 5) {
-                tBuff += tMilliSec;
-                handler.removeCallbacks(runnable);
-                timer.stop();
-                String czas = timer.getText().toString();
-                gameOverImageView.setVisibility(View.VISIBLE);
+    }
 
-                Log.i("Czas", czas);
+    void checkEndgameConditions() {
 
-            }
+        boolean isGameEnded = usedIndexes.size() == clubLogosTable.length || numberOfQuestions == 15;
 
+        if (isGameEnded == true) {
+            tBuff += tMilliSec;
+            handler.removeCallbacks(runnable);
+            timer.stop();
+            String czas = timer.getText().toString();
+            gameOverImageView.setVisibility(View.VISIBLE);
+
+            Log.i("Czas", czas);
 
         }
-
-
     }
+
+
+}
 
 
 

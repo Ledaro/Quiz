@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/startImageView"
-        android:layout_width="386dp"
-        android:layout_height="705dp"
+        android:layout_width="420dp"
+        android:layout_height="680dp"
         android:layout_marginStart="2dp"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/startbackround"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/gameImageView"
