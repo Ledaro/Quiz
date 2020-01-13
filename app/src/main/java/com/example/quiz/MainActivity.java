@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView gameImageView;
     ImageView clubLogosImg;
     ImageView gameOverImageView;
+    ImageView preGameImageView;
+    Button preGame;
     Button startButton;
 
 
@@ -55,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView scoreTextView;
+    TextView preGameText;
+    TextView gameScore;
+    TextView gameTime;
 
     Chronometer timer;
     Handler handler;
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         startButton = findViewById(R.id.startButton);
         gameOverImageView = findViewById(R.id.gameOverImageView);
         clubLogosImg = findViewById(R.id.clubLogosImg);
+        preGameImageView = findViewById(R.id.preGameImageView);
+        preGame = findViewById(R.id.preGameButton);
         answersLayout = findViewById(R.id.answersLayout);
 
         button0 = findViewById(R.id.button0);
@@ -81,12 +88,18 @@ public class MainActivity extends AppCompatActivity {
         button3 = findViewById(R.id.button3);
 
         scoreTextView = findViewById(R.id.scoreTextView);
+        preGameText = findViewById(R.id.preGameText);
+        gameScore = findViewById(R.id.gameScore);
+        //gameTime = findViewById(R.id.gameTime);
 
         startImageView.setVisibility(View.VISIBLE);
         gameImageView.setVisibility(View.INVISIBLE);
-        startButton.setVisibility(View.VISIBLE);
+        startButton.setVisibility(View.INVISIBLE);
+        preGame.setVisibility(View.VISIBLE);
         gameOverImageView.setVisibility(View.INVISIBLE);
         scoreTextView.setVisibility(View.INVISIBLE);
+        gameScore.setVisibility(View.INVISIBLE);
+//        gameTime.setVisibility(View.INVISIBLE);
 
 
         answersLayout.setVisibility(View.INVISIBLE);
@@ -126,20 +139,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    public void preGame(View view){
+
+        preGameImageView.setVisibility(View.VISIBLE);
+        startButton.setVisibility(View.VISIBLE);
+        preGameText.setText
+
+                ("       Witaj w quizie piłkarskim! " +
+                        "\n\n\n\n        Twoim zadaniem będzie " +
+                        "\n  odgadnięcie 10 herbów klubów " +
+                        "\n   piłkarskich w jak najkrótszym" +
+                        "\n                       czasie!");
+    }
+
+
     public void startGame(View view) {
 
+        preGameText.setText("");
         startImageView.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.INVISIBLE);
+        preGame.setVisibility(View.INVISIBLE);
+        preGameImageView.setVisibility(View.INVISIBLE);
         gameImageView.setVisibility(View.VISIBLE);
+        clubLogosImg.setVisibility(View.VISIBLE);
         answersLayout.setVisibility(View.VISIBLE);
         scoreTextView.setVisibility(View.VISIBLE);
+        gameScore.setText("");
+//        gameTime.setText("");
         scoreTextView.setText("0/0");
         timer.setVisibility(View.VISIBLE);
         startTimer();
         newQuestion();
-        //gameOver();
-
-
     }
 
 
@@ -150,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (usedIndexes.contains(randomClub)) {
             return getClubIndex();
-
         }
         usedIndexes.add(randomClub);
 
@@ -218,19 +248,38 @@ public class MainActivity extends AppCompatActivity {
 
     void checkEndgameConditions() {
 
-        boolean isGameEnded = usedIndexes.size() == clubLogosTable.length || numberOfQuestions == 15;
+        boolean isGameEnded = usedIndexes.size() == clubLogosTable.length || numberOfQuestions == 10;
 
         if (isGameEnded == true) {
             tBuff += tMilliSec;
             handler.removeCallbacks(runnable);
             timer.stop();
             String czas = timer.getText().toString();
+
+
+            gameImageView.setVisibility(View.INVISIBLE);
+            clubLogosImg.setVisibility(View.INVISIBLE);
+            answersLayout.setVisibility(View.INVISIBLE);
+            scoreTextView.setVisibility(View.INVISIBLE);
             gameOverImageView.setVisibility(View.VISIBLE);
+            gameScore.setText("Score");
+
+
+            //gameTime.setText("Time");
+         //   gameStatistics();
 
             Log.i("Czas", czas);
 
         }
     }
+
+//    void gameStatistics(){
+//
+//        gameScore.setVisibility(View.VISIBLE);
+//        gameTime.setVisibility(View.VISIBLE);
+//
+//
+//    }
 
 
 }
