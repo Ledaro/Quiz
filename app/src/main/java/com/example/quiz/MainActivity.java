@@ -2,6 +2,7 @@ package com.example.quiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -18,10 +19,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-
-    //Zmienne używane w timerze
-    private static final long START_TIME_IN_MILLIS = 3000;
-    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
 
     ImageView startImageView;
     ImageView gameImageView;
@@ -125,13 +122,12 @@ public class MainActivity extends AppCompatActivity {
         gameStarted = false;
 
 
-
         appOpened();
 
     }
 
 
-    public void appOpened (){
+    public void appOpened() {
 
         startImageView.setVisibility(View.VISIBLE);
         gameImageView.setVisibility(View.INVISIBLE);
@@ -151,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         isGameEnded = false;
 
         usedIndexes.clear();
-        numberOfQuestions =0;
+        numberOfQuestions = 0;
         score = 0;
 
         timer.stop();
@@ -160,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void backToMainMenu (View view){
+    public void backToMainMenu(View view) {
 
         appOpened();
         timer.stop();
@@ -177,9 +173,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public Runnable runnable = new Runnable() {
+        @SuppressLint({"DefaultLocale", "SetTextI18n"})
         @Override
         public void run() {
 
@@ -196,7 +191,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void stopTimer (){
+    @SuppressLint("SetTextI18n")
+    public void stopTimer() {
         tMilliSec = 0L;
         tStart = 0L;
         tBuff = 0L;
@@ -208,10 +204,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     public void about(View view) {
 
 
-        if (gameStarted == false) {
+        if (!gameStarted) {
             backButton1.setVisibility(View.VISIBLE);
             aboutTextView.setText("Twórca: Filip Żelaskowski " +
                     "\n               gd40629");
@@ -222,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void backAbout(View view) {
 
-        if (gameStarted == false) {
+        if (!gameStarted) {
             backButton1.setVisibility(View.INVISIBLE);
             preGameButton.setVisibility(View.VISIBLE);
             aboutTextView.setText("");
@@ -239,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
         startButton.setVisibility(View.INVISIBLE);
 
 
-
     }
 
     public void startTimer() {
@@ -250,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
         timer.start();
     }
 
+    @SuppressLint("SetTextI18n")
     public void preGame(View view) {
 
         preGameImageView.setVisibility(View.VISIBLE);
@@ -272,19 +269,21 @@ public class MainActivity extends AppCompatActivity {
     public void preGameTimer(View view) {
 
 
-        new CountDownTimer(mTimeLeftInMillis, 1000) {
+        startButton.setVisibility(View.INVISIBLE);
+        preGameText.setText("");
+        backButton1.setVisibility(View.INVISIBLE);
+
+
+        new CountDownTimer(3100, 1000) {
+
 
             @Override
             public void onTick(long millisUntilFinished) {
-                mTimeLeftInMillis = millisUntilFinished;
-                long seconds = (int) (mTimeLeftInMillis / 1000);
-                timerTextView.setText(String.valueOf(seconds));
-                startButton.setVisibility(View.INVISIBLE);
-                preGameText.setText("");
-                backButton1.setVisibility(View.INVISIBLE);
+                timerTextView.setText(String.valueOf((int) (millisUntilFinished / 1000)));
 
 
             }
+
 
             @Override
             public void onFinish() {
@@ -318,11 +317,10 @@ public class MainActivity extends AppCompatActivity {
         newQuestion();
 
 
-
     }
 
 
-    int getClubIndex() {
+    public int getClubIndex() {
 
 
         int randomClub = random.nextInt(31);
@@ -339,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         int wrongAnswer = random.nextInt(31);
         String wrongAnswerClubName = clubNamesTable[wrongAnswer];
 
-        if (Arrays.asList(answers).contains(wrongAnswerClubName) == true) {
+        if (Arrays.asList(answers).contains(wrongAnswerClubName)) {
             return getWrongAnswerName();
         }
 
@@ -392,12 +390,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void checkEndgameConditions() {
 
 
         isGameEnded = usedIndexes.size() == clubLogosTable.length || numberOfQuestions == 10;
 
-        if (isGameEnded == true) {
+        if (isGameEnded) {
             tBuff += tMilliSec;
             handler.removeCallbacks(runnable);
             timer.stop();
@@ -408,14 +407,11 @@ public class MainActivity extends AppCompatActivity {
             gameFinalTime.setText(" Twój czas: " + czas);
             gameOver();
 
-
-
-
         }
     }
 
 
-    public void gameOver (){
+    public void gameOver() {
 
         gameImageView.setVisibility(View.INVISIBLE);
         clubLogosImg.setVisibility(View.INVISIBLE);
@@ -426,8 +422,6 @@ public class MainActivity extends AppCompatActivity {
         backButton2.setVisibility(View.VISIBLE);
         gameFinalScore.setVisibility(View.VISIBLE);
         stopTimer();
-
-
 
 
     }
