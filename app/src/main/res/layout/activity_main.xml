@@ -11,15 +11,28 @@
         android:id="@+id/startImageView"
         android:layout_width="370dp"
         android:layout_height="710dp"
-        android:layout_marginStart="2dp"
         android:scaleType="centerInside"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.81"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/startbackround"
+        tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/preGameImageView"
+        android:layout_width="370dp"
+        android:layout_height="710dp"
+        android:scaleType="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75"
+        app:srcCompat="@drawable/pregamebackround"
         tools:visibility="invisible" />
 
     <ImageView
@@ -33,6 +46,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/gamebackground"
+        tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/clubLogosImg"
+        android:layout_width="229dp"
+        android:layout_height="388dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.110000014"
+        app:srcCompat="@drawable/psg"
+        tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/gameOverImageView"
+        android:layout_width="386dp"
+        android:layout_height="705dp"
+        android:scaleType="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gameoverbackground"
         tools:visibility="invisible" />
 
     <Button
@@ -51,18 +92,64 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
-    <ImageView
-        android:id="@+id/clubLogosImg"
-        android:layout_width="229dp"
-        android:layout_height="388dp"
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="190dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="380dp"
+        android:onClick="preGameTimer"
+        android:text="Start"
+        android:textSize="24sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.116"
-        tools:srcCompat="@drawable/psg"
         tools:visibility="invisible" />
+
+    <Button
+        android:id="@+id/aboutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="about"
+        android:text="Autor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.96"
+        tools:visibility="invisible" />
+
+    <Button
+        android:id="@+id/backButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="backAbout"
+        android:text="Wróć"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="invisible" />
+
+    <Button
+        android:id="@+id/backButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="backToMainMenu"
+        android:text="Wróć"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible" />
 
     <androidx.gridlayout.widget.GridLayout
 
@@ -119,6 +206,31 @@
 
     </androidx.gridlayout.widget.GridLayout>
 
+
+    <TextView
+        android:id="@+id/aboutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/preGameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
     <TextView
         android:id="@+id/scoreTextView"
         android:layout_width="wrap_content"
@@ -134,6 +246,45 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
+    <TextView
+        android:id="@+id/gameFinalScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/gameFinalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.59000003"
+        tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="144dp"
+        android:layout_height="354dp"
+        android:textSize="350sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Chronometer
         android:id="@+id/timer"
@@ -150,138 +301,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.72"
         tools:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/gameOverImageView"
-        android:layout_width="386dp"
-        android:layout_height="705dp"
-        android:scaleType="center"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gameoverbackground"
-        tools:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/preGameImageView"
-        android:layout_width="386dp"
-        android:layout_height="705dp"
-        android:scaleType="center"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.88"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/pregamebackround"
-        tools:visibility="invisible" />
-
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="190dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="380dp"
-        android:onClick="preGameTimer"
-        android:text="Start"
-        android:textSize="24sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/preGameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
-
-    <TextView
-        android:id="@+id/gameScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.172" />
-
-    <TextView
-        android:id="@+id/timerTextView"
-        android:layout_width="144dp"
-        android:layout_height="354dp"
-        android:textSize="250dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/aboutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="about"
-        android:text="O grze"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/aboutTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/backButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="backAbout"
-        android:text="Wróć"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:visibility="invisible" />
-
-    <Button
-        android:id="@+id/backButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="preGame"
-        android:text="Wróć"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

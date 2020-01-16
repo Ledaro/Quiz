@@ -2,7 +2,6 @@ package com.example.quiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -16,11 +15,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Zmienne używane w timerze
     private static final long START_TIME_IN_MILLIS = 3000;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
 
@@ -64,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
     TextView scoreTextView;
     TextView preGameText;
-    TextView gameScore;
-    TextView gameTime;
+    TextView gameFinalScore;
+    TextView gameFinalTime;
     TextView timerTextView;
 
     Chronometer timer;
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     TextView aboutTextView;
 
     boolean gameStarted;
-
+    boolean isGameEnded = false;
 
 
     @Override
@@ -92,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
         gameImageView = findViewById(R.id.gameImageView);
         startButton = findViewById(R.id.startButton);
         gameOverImageView = findViewById(R.id.gameOverImageView);
-        clubLogosImg = findViewById(R.id.clubLogosImg);
         preGameImageView = findViewById(R.id.preGameImageView);
         preGameButton = findViewById(R.id.preGameButton);
         answersLayout = findViewById(R.id.answersLayout);
+        clubLogosImg = findViewById(R.id.clubLogosImg);
 
         button0 = findViewById(R.id.button0);
         button1 = findViewById(R.id.button1);
@@ -104,21 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
         scoreTextView = findViewById(R.id.scoreTextView);
         preGameText = findViewById(R.id.preGameText);
-        gameScore = findViewById(R.id.gameScore);
+        gameFinalScore = findViewById(R.id.gameFinalScore);
+        gameFinalTime = findViewById(R.id.gameFinalTime);
         timerTextView = findViewById(R.id.timerTextView);
-        timerTextView.setText("");
 
-        startImageView.setVisibility(View.VISIBLE);
-        gameImageView.setVisibility(View.INVISIBLE);
-        startButton.setVisibility(View.INVISIBLE);
-        preGameButton.setVisibility(View.VISIBLE);
-        gameOverImageView.setVisibility(View.INVISIBLE);
-        scoreTextView.setVisibility(View.INVISIBLE);
-        gameScore.setVisibility(View.INVISIBLE);
-
-
-
-        answersLayout.setVisibility(View.INVISIBLE);
 
         timer = findViewById(R.id.timer);
         handler = new Handler();
@@ -133,12 +121,58 @@ public class MainActivity extends AppCompatActivity {
         backButton2 = findViewById(R.id.backButton2);
         aboutTextView = findViewById(R.id.aboutTextView);
 
-        aboutButton.setVisibility(View.VISIBLE);
-        backButton1.setVisibility(View.INVISIBLE);
-        aboutTextView.setText("");
 
         gameStarted = false;
 
+
+
+        appOpened();
+
+    }
+
+
+    public void appOpened (){
+
+        startImageView.setVisibility(View.VISIBLE);
+        gameImageView.setVisibility(View.INVISIBLE);
+        startButton.setVisibility(View.INVISIBLE);
+        preGameButton.setVisibility(View.VISIBLE);
+        gameOverImageView.setVisibility(View.INVISIBLE);
+        scoreTextView.setVisibility(View.INVISIBLE);
+        answersLayout.setVisibility(View.INVISIBLE);
+        aboutButton.setVisibility(View.VISIBLE);
+        backButton1.setVisibility(View.INVISIBLE);
+        clubLogosImg.setVisibility(View.INVISIBLE);
+
+
+        aboutTextView.setText("");
+        timerTextView.setText("");
+        gameStarted = false;
+        isGameEnded = false;
+
+        usedIndexes.clear();
+        numberOfQuestions =0;
+        score = 0;
+
+        timer.stop();
+        timer.setVisibility(View.INVISIBLE);
+
+    }
+
+
+    public void backToMainMenu (View view){
+
+        appOpened();
+        timer.stop();
+
+        timer.setVisibility(View.INVISIBLE);
+        clubLogosImg.setVisibility(View.INVISIBLE);
+        backButton1.setVisibility(View.INVISIBLE);
+        backButton2.setVisibility(View.INVISIBLE);
+        gameFinalScore.setVisibility(View.INVISIBLE);
+        gameFinalScore.setText("");
+        gameFinalTime.setVisibility(View.INVISIBLE);
+        gameFinalTime.setText("");
 
     }
 
@@ -162,19 +196,19 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-
-    public void about(View view){
+    public void about(View view) {
 
 
         if (gameStarted == false) {
             backButton1.setVisibility(View.VISIBLE);
-            aboutTextView.setText("Twórca: Filip Żelaskowski ; gd40629");
+            aboutTextView.setText("Twórca: Filip Żelaskowski " +
+                    "\n               gd40629");
             preGameButton.setVisibility(View.INVISIBLE);
         }
 
     }
 
-    public void backAbout (View view){
+    public void backAbout(View view) {
 
         if (gameStarted == false) {
             backButton1.setVisibility(View.INVISIBLE);
@@ -183,14 +217,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         backButton2.setVisibility(View.INVISIBLE);
         preGameButton.setVisibility(View.VISIBLE);
         aboutButton.setVisibility(View.VISIBLE);
         startImageView.setVisibility(View.VISIBLE);
-        stopGame();
         backButton1.setVisibility(View.INVISIBLE);
-
+        preGameText.setText("");
+        preGameImageView.setVisibility(View.INVISIBLE);
+        startButton.setVisibility(View.INVISIBLE);
 
 
 
@@ -198,12 +232,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void startTimer() {
 
+        timer.setText("00:00:00");
+        timer.setBase(SystemClock.elapsedRealtime());
         tStart = SystemClock.uptimeMillis();
         handler.postDelayed(runnable, 0);
         timer.start();
     }
 
-    public void preGame(View view){
+    public void preGame(View view) {
 
         preGameImageView.setVisibility(View.VISIBLE);
         startButton.setVisibility(View.VISIBLE);
@@ -211,9 +247,7 @@ public class MainActivity extends AppCompatActivity {
         backButton2.setVisibility(View.INVISIBLE);
         preGameButton.setVisibility(View.INVISIBLE);
         aboutButton.setVisibility(View.INVISIBLE);
-
         preGameText.setText
-
 
                 ("       Witaj w quizie piłkarskim! " +
                         "\n\n\n\n        Twoim zadaniem będzie " +
@@ -224,31 +258,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void preGameTimer (View view){
+    public void preGameTimer(View view) {
 
 
-        new CountDownTimer(mTimeLeftInMillis,1000) {
+        new CountDownTimer(mTimeLeftInMillis, 1000) {
 
-           @Override
+            @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
-                int seconds = (int) (mTimeLeftInMillis / 1000);
+                long seconds = (int) (mTimeLeftInMillis / 1000);
                 timerTextView.setText(String.valueOf(seconds));
                 startButton.setVisibility(View.INVISIBLE);
                 preGameText.setText("");
                 backButton1.setVisibility(View.INVISIBLE);
 
 
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                startButton.setVisibility(View.INVISIBLE);
-//                preGameText.setText("");
-//                timerTextView.setText((int)((millisUntilFinished/1000) % 60));
-
-//                if (millisUntilFinished/1000 < 1){
-//                    timerTextView.setText("START!");
-//
-//                }
             }
 
             @Override
@@ -266,10 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGame() {
 
-
-        gameStarted = true;
         preGameText.setText("");
-        backButton2.setVisibility(View.VISIBLE);
         startImageView.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.INVISIBLE);
         preGameButton.setVisibility(View.INVISIBLE);
@@ -279,27 +300,12 @@ public class MainActivity extends AppCompatActivity {
         answersLayout.setVisibility(View.VISIBLE);
         scoreTextView.setVisibility(View.VISIBLE);
         gameOverImageView.setVisibility(View.INVISIBLE);
-        gameScore.setText("");
+        gameFinalScore.setText("");
         scoreTextView.setText("0/0");
         timer.setVisibility(View.VISIBLE);
         startTimer();
         newQuestion();
-    }
 
-    public void stopGame(){
-        gameStarted = false;
-        preGameText.setText("");
-        backButton2.setVisibility(View.INVISIBLE);
-        startButton.setVisibility(View.INVISIBLE);
-        preGameButton.setVisibility(View.VISIBLE);
-        preGameImageView.setVisibility(View.INVISIBLE);
-        gameImageView.setVisibility(View.INVISIBLE);
-        clubLogosImg.setVisibility(View.INVISIBLE);
-        answersLayout.setVisibility(View.INVISIBLE);
-        scoreTextView.setVisibility(View.INVISIBLE);
-        scoreTextView.setText("");
-        timer.setVisibility(View.INVISIBLE);
-        gameOverImageView.setVisibility(View.INVISIBLE);
 
 
     }
@@ -322,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
         int wrongAnswer = random.nextInt(31);
         String wrongAnswerClubName = clubNamesTable[wrongAnswer];
 
-        if (Arrays.asList( answers).contains(wrongAnswerClubName) == true) {
+        if (Arrays.asList(answers).contains(wrongAnswerClubName) == true) {
             return getWrongAnswerName();
         }
 
@@ -377,7 +383,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkEndgameConditions() {
 
-        boolean isGameEnded = usedIndexes.size() == clubLogosTable.length || numberOfQuestions == 10;
+
+        isGameEnded = usedIndexes.size() == clubLogosTable.length || numberOfQuestions == 10;
 
         if (isGameEnded == true) {
             tBuff += tMilliSec;
@@ -386,24 +393,24 @@ public class MainActivity extends AppCompatActivity {
             String czas = timer.getText().toString();
 
 
+
             gameImageView.setVisibility(View.INVISIBLE);
             clubLogosImg.setVisibility(View.INVISIBLE);
             answersLayout.setVisibility(View.INVISIBLE);
             scoreTextView.setVisibility(View.INVISIBLE);
             gameOverImageView.setVisibility(View.VISIBLE);
-            gameScore.setText(czas);
+            timer.setVisibility(View.INVISIBLE);
+            backButton2.setVisibility(View.VISIBLE);
+            gameFinalScore.setVisibility(View.VISIBLE);
+            gameFinalScore.setText("    KONIEC GRY!" +
+                    "\n\n\n Twój wynik: " + scoreTextView.getText());
+            gameFinalTime.setVisibility(View.VISIBLE);
+            gameFinalTime.setText(" Twój czas: " + czas);
+
+
 
         }
     }
-
-    //    void gameStatistics(){
-//
-//        gameScore.setVisibility(View.VISIBLE);
-//        gameTime.setVisibility(View.VISIBLE);
-//
-//
-//    }
-
 
 }
 
