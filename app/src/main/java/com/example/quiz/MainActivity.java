@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
     public Runnable runnable = new Runnable() {
         @Override
         public void run() {
+
             tMilliSec = SystemClock.uptimeMillis() - tStart;
             tUpdate = tBuff + tMilliSec;
             sec = (int) (tUpdate / 1000);
@@ -194,6 +195,17 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+
+    public void stopTimer (){
+        tMilliSec = 0L;
+        tStart = 0L;
+        tBuff = 0L;
+        tUpdate = 0L;
+        sec = 0;
+        min = 0;
+        timer.setText("00:00:00");
+
+    }
 
 
     public void about(View view) {
@@ -232,8 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startTimer() {
 
-        timer.setText("00:00:00");
-        timer.setBase(SystemClock.elapsedRealtime());
+
         tStart = SystemClock.uptimeMillis();
         handler.postDelayed(runnable, 0);
         timer.start();
@@ -391,25 +402,34 @@ public class MainActivity extends AppCompatActivity {
             handler.removeCallbacks(runnable);
             timer.stop();
             String czas = timer.getText().toString();
-
-
-
-            gameImageView.setVisibility(View.INVISIBLE);
-            clubLogosImg.setVisibility(View.INVISIBLE);
-            answersLayout.setVisibility(View.INVISIBLE);
-            scoreTextView.setVisibility(View.INVISIBLE);
-            gameOverImageView.setVisibility(View.VISIBLE);
-            timer.setVisibility(View.INVISIBLE);
-            backButton2.setVisibility(View.VISIBLE);
-            gameFinalScore.setVisibility(View.VISIBLE);
             gameFinalScore.setText("    KONIEC GRY!" +
                     "\n\n\n Twój wynik: " + scoreTextView.getText());
             gameFinalTime.setVisibility(View.VISIBLE);
             gameFinalTime.setText(" Twój czas: " + czas);
+            gameOver();
+
 
 
 
         }
+    }
+
+
+    public void gameOver (){
+
+        gameImageView.setVisibility(View.INVISIBLE);
+        clubLogosImg.setVisibility(View.INVISIBLE);
+        answersLayout.setVisibility(View.INVISIBLE);
+        scoreTextView.setVisibility(View.INVISIBLE);
+        gameOverImageView.setVisibility(View.VISIBLE);
+        timer.setVisibility(View.INVISIBLE);
+        backButton2.setVisibility(View.VISIBLE);
+        gameFinalScore.setVisibility(View.VISIBLE);
+        stopTimer();
+
+
+
+
     }
 
 }
